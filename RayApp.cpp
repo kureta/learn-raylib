@@ -1,4 +1,6 @@
 #include "RayApp.h"
+#define RAYGUI_IMPLEMENTATION
+#include "raygui.h"
 
 float t = 0.0f;
 int idx = 0;
@@ -45,7 +47,7 @@ void RayApp::setup()
     this->img.mipmaps = 1;
     this->img.format = PIXELFORMAT_UNCOMPRESSED_R32G32B32;
 
-    const int *vals = LoadRandomSequence(128, -314159265, 314159265);
+    const int* vals = LoadRandomSequence(128, -314159265, 314159265);
     for (int i = 0; i < 128; i++)
     {
         this->phases[i] = static_cast<float>(vals[i]) / 100000000.0f;
@@ -72,7 +74,7 @@ void RayApp::update()
     }
     else if (IsKeyPressed(KEY_P))
     {
-        const int *vals = LoadRandomSequence(128, -314159265, 314159265);
+        const int* vals = LoadRandomSequence(128, -314159265, 314159265);
         for (int i = 0; i < 128; i++)
         {
             this->phases[i] = static_cast<float>(vals[i]) / 100000000.0f;
@@ -118,4 +120,7 @@ void RayApp::draw() const
         DrawText("PAUSED", 350, 200, 30, GRAY);
 
     DrawFPS(10, 10);
+    GuiSlider((Rectangle){355, 400, 165, 20},
+              "TEST", TextFormat("%2.2f", mult), &mult,
+              0.0f, 2.0f);
 }

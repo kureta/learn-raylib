@@ -37,9 +37,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
 
 
 # Our Project
-add_executable(${PROJECT_NAME} main.cpp
-        RayApp.cpp
-        RayApp.h)
+add_executable(${PROJECT_NAME} main.cpp RayApp.cpp RayApp.h raygui.h)
 #set(raylib_VERBOSE 1)
 target_link_libraries(${PROJECT_NAME} raylib "${TORCH_LIBRARIES}")
 
