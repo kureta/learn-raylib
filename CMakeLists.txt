@@ -23,12 +23,25 @@ if (NOT raylib_FOUND) # If there's none, fetch and build raylib
     endif ()
 endif ()
 
+FetchContent_Declare(
+        Torch
+        DOWNLOAD_EXTRACT_TIMESTAMP OFF
+        URL https://download.pytorch.org/libtorch/cu121/libtorch-shared-with-deps-2.1.1%2Bcu121.zip
+)
+FetchContent_MakeAvailable(Torch)
+list(APPEND CMAKE_PREFIX_PATH "${torch_SOURCE_DIR}")
+
+find_package(Torch REQUIRED)
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${TORCH_CXX_FLAGS}")
+
+
 # Our Project
 add_executable(${PROJECT_NAME} main.cpp
         RayApp.cpp
         RayApp.h)
 #set(raylib_VERBOSE 1)
-target_link_libraries(${PROJECT_NAME} raylib)
+target_link_libraries(${PROJECT_NAME} raylib "${TORCH_LIBRARIES}")
 
 # Web Configurations
 if (${PLATFORM} STREQUAL "Web")
