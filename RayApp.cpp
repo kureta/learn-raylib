@@ -52,13 +52,16 @@ void RayApp::setup()
         this->phases[i] = static_cast<float>(vals[i]) / 100000000.0f;
     }
 
-    // Run once to mitigate delays
+    // Run twice (who knows why) to mitigate delays
+    std::cout << "Running inference twice for warm-up..." << std::endl;
+    for (int i = 0; i < 2; i++)
     {
         torch::NoGradGuard no_grad;
         this->output = this->module.forward(inputs).toTensor();
         this->output = (this->output + 1.0f) / 2.0f;
         this->img.data = this->output[0].permute({1, 2, 0}).contiguous().to(torch::kCPU).data_ptr();
     }
+    std::cout << "Warm-up done!" << std::endl;
 }
 
 void RayApp::update(double t, double dt)
