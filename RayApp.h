@@ -23,7 +23,7 @@ private:
     std::vector<torch::jit::IValue> inputs;
     torch::Tensor z;
     torch::Tensor label;
-    const torch::Tensor trunc = torch::ones(1) * 0.4f;
+    const torch::Tensor trunc = torch::ones(1) * 1.0f;
     torch::Tensor output;
     Image img;
     float phases[128];

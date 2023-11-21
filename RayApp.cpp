@@ -5,7 +5,9 @@
 int idx = 0;
 float mult = 1.0f;
 
-
+// TODO: move BigGAN to its own class and limit update rate to 24 per second
+// TODO: implement a canvas so that only RayApp draws directly to screen.
+// TODO: move Animator to its own class
 void RayApp::setup()
 {
     SetTraceLogLevel(LOG_ERROR);
@@ -15,7 +17,7 @@ void RayApp::setup()
     constexpr int screenHeight = 720;
 
     SetConfigFlags(FLAG_MSAA_4X_HINT);
-    InitWindow(screenWidth, screenHeight, "raylib [shapes] example - bouncing ball");
+    InitWindow(screenWidth, screenHeight, "raylib BigGan");
 
     this->pause = false;
     this->framesCounter = 0;
@@ -64,7 +66,7 @@ void RayApp::setup()
     std::cout << "Warm-up done!" << std::endl;
 }
 
-void RayApp::update(double t, double dt)
+void RayApp::update(const double t, const double dt)
 {
     if (IsKeyPressed(KEY_SPACE))
     {
@@ -110,7 +112,7 @@ void RayApp::update(double t, double dt)
 
         for (int i = 0; i < 128; i++)
         {
-            this->z[0][i] = static_cast<float>(std::cos(t + this->phases[i])) * mult;
+            this->z[0][i] = static_cast<float>(std::cos(t + this->phases[i]) * mult);
         }
     }
     else framesCounter++;
