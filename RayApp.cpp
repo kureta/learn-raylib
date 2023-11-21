@@ -2,7 +2,6 @@
 #define RAYGUI_IMPLEMENTATION
 #include "raygui.h"
 
-float t = 0.0f;
 int idx = 0;
 float mult = 1.0f;
 
@@ -52,9 +51,17 @@ void RayApp::setup()
     {
         this->phases[i] = static_cast<float>(vals[i]) / 100000000.0f;
     }
+
+    // Run once to mitigate delays
+    {
+        torch::NoGradGuard no_grad;
+        this->output = this->module.forward(inputs).toTensor();
+        this->output = (this->output + 1.0f) / 2.0f;
+        this->img.data = this->output[0].permute({1, 2, 0}).contiguous().to(torch::kCPU).data_ptr();
+    }
 }
 
-void RayApp::update()
+void RayApp::update(double t, double dt)
 {
     if (IsKeyPressed(KEY_SPACE))
     {
@@ -100,9 +107,8 @@ void RayApp::update()
 
         for (int i = 0; i < 128; i++)
         {
-            this->z[0][i] = std::cos(t + this->phases[i]) * mult;
+            this->z[0][i] = static_cast<float>(std::cos(t + this->phases[i])) * mult;
         }
-        t += 0.03;
     }
     else framesCounter++;
 }
@@ -120,7 +126,7 @@ void RayApp::draw() const
         DrawText("PAUSED", 350, 200, 30, GRAY);
 
     DrawFPS(10, 10);
-    GuiSlider((Rectangle){355, 400, 165, 20},
+    GuiSlider((Rectangle){1000, 100, 165, 20},
               "TEST", TextFormat("%2.2f", mult), &mult,
               0.0f, 2.0f);
 }

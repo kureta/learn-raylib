@@ -13,7 +13,7 @@ class RayApp
 {
 public:
     void setup();
-    void update();
+    void update(double t, double dt);
     void draw() const;
 
 private:
